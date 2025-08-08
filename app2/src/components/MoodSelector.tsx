@@ -86,8 +86,7 @@ export const MoodSelector = ({onMoodSelect, selectedMood}: MoodSelectorProps) =>
 
           <Button
               size="lg"
-              className="register-button text-primary-foreground"
-              style={{fontSize: '1.5em', height: 'auto'}}
+              className="register-button text-primary-foreground button-primary"
               disabled={!selectedMood}
           >
             Registrar

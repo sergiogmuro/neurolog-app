@@ -173,6 +173,11 @@
         box-shadow: 0 8px 32px hsl(0 0% 0% / 0.1);
     }
 
+    .button-primary {
+        font-size: 1.5em !important;
+        height: 50px !important;
+    }
+
     /* Enhanced mood selector styling */
     .mood-button {
         @apply w-16 h-16 rounded-full flex items-center justify-center text-2xl;

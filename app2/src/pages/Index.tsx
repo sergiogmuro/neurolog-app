@@ -8,6 +8,7 @@ import "@fontsource/raleway/300.css";
 import "@fontsource/raleway/400.css";
 import "@fontsource/raleway/500.css";
 import "@fontsource/raleway/600.css";
+import {Relief} from "@/components/Relief.tsx";
 
 const Index = () => {
   const [currentView, setCurrentView] = useState("home");
@@ -28,7 +29,9 @@ const Index = () => {
       case "calendar":
         return <MoodCalendar/>;
       case "profile":
-        return <Profile/>;
+        return <Profile onDesahogoClick={() => setCurrentView("relief")} />;
+      case "relief":
+        return <Relief onBack={() => setCurrentView("profile")} />;
       default:
         return <MoodSelector onMoodSelect={handleMoodSelect} selectedMood={selectedMood}/>;
     }

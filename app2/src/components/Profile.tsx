@@ -2,7 +2,11 @@ import {Card} from "@/components/ui/card";
 import {Button} from "@/components/ui/button";
 import {Settings, Bell, Heart, Target, Award} from "lucide-react";
 
-export const Profile = () => {
+interface ProfileProps {
+  onDesahogoClick: () => void;
+}
+
+export const Profile = ({ onDesahogoClick }: ProfileProps) => {
   return (
       <div className="max-w-md mx-auto">
         {/* Profile Header */}
@@ -45,8 +49,11 @@ export const Profile = () => {
             Tómate un momento para reflexionar sobre tus emociones. Escribir sobre tus sentimientos puede ayudarte a
             procesarlos mejor.
           </p>
-          <Button className="w-full rounded-full bg-accent hover:bg-accent/90 text-accent-foreground">
-            Escribir reflexión
+          <Button
+              onClick={onDesahogoClick}
+              className="register-button w-full text-primary-foreground button-primary"
+          >
+            Momento de desahogo
           </Button>
         </Card>
 
