@@ -1,38 +1,27 @@
-import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
-import AppContainer from './components/AppContainer';
-import BottomNav from './components/BottomNav';
+import { Toaster } from "@/components/ui/toaster";
+import { Toaster as Sonner } from "@/components/ui/sonner";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Index from "./pages/Index";
+import NotFound from "./pages/NotFound";
 
-import Desahogo from './pages/Desahogo';
-import NotFound from './pages/NotFound';
-import HomePage from './pages/HomePage';
-import React, {useEffect, useState} from "react";
-import LoadingPage from "./Pages/LoadingPage";
+const queryClient = new QueryClient();
 
-const App = () => {
-  const [isLoading, setIsLoading] = useState<boolean>(true)
-
-  useEffect(() => {
-    if (isLoading) {
-      setTimeout(() => setIsLoading(false), 1000)
-    }
-  }, [isLoading]);
-
-  return (
-      <Router>
-        <AppContainer>
-          {isLoading ? (
-              <LoadingPage/>
-          ) : (
-              <Routes>
-                <Route path="/" element={<HomePage/>}/>
-                <Route path="/desahogo" element={<Desahogo/>}/>
-                <Route path="*" element={<NotFound/>}/>
-              </Routes>
-          )}
-        </AppContainer>
-        <BottomNav/>
-      </Router>
-  );
-};
+const App = () => (
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </TooltipProvider>
+    </QueryClientProvider>
+);
 
 export default App;
