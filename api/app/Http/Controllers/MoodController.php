@@ -3,14 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Trend;
+use App\Models\Mood;
 
-class TrendController extends Controller
+class MoodController extends Controller
 {
     public function index(Request $request)
     {
         $community = $request->query('community') ?? null;
-        $query = Trend::query();
+        $query = Mood::query();
 
         if ($community) {
             $query->where('community', $community);
@@ -38,7 +38,7 @@ class TrendController extends Controller
         ]);
 
         // Buscar si ya existe un trend para esta comunidad
-        $existing = Trend::where('community', $data['community'])
+        $existing = Mood::where('community', $data['community'])
             ->where('trend', $data['trend'])
             ->first();
 
@@ -51,7 +51,7 @@ class TrendController extends Controller
         }
 
         // Si no existe, lo crea
-        $trend = Trend::create($data);
+        $trend = Mood::create($data);
 
         return response()->json($trend, 201);
     }

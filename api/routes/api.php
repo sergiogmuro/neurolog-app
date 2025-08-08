@@ -1,11 +1,11 @@
 <?php
 
-use App\Http\Controllers\TrendController;
+use App\Http\Controllers\MoodController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function() {
     dd('ENTROOOO');
 });
-Route::get('/trends', [TrendController::class, 'index']);
-Route::post('/trends', [TrendController::class, 'store']);
+Route::get('/moods', [MoodController::class, 'index']);
+Route::post('/moods', [MoodController::class, 'store']);
 

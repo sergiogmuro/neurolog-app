@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Trend extends Model
+class Mood extends Model
 {
-    protected $fillable = ['community', 'trend', 'count'];
+    protected $fillable = ['user_id', 'mood', 'mood_description'];
 }
