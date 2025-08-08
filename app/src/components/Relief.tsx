@@ -1,7 +1,10 @@
 import {useState, useRef} from "react";
 import {Card} from "@/components/ui/card";
 import {Button} from "@/components/ui/button";
-import {ArrowLeft, Play, Pause, Music, Volume2} from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { useToast } from "@/hooks/use-toast";
+import {ArrowLeft, Play, Pause, Music, Volume2, AlertCircle} from "lucide-react";
 
 interface Song {
   id: number;
@@ -57,22 +60,49 @@ export const Relief = ({onBack}: DesahogoProps) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentSong, setCurrentSong] = useState<Song | null>(null);
   const [showPlaylist, setShowPlaylist] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const audioRef = useRef<HTMLAudioElement>(null);
+  const { toast } = useToast();
 
-  const handlePlayPause = () => {
+  const handlePlayPause = async () => {
     if (!currentSong) return;
 
-    if (isPlaying) {
-      audioRef.current?.pause();
-    } else {
-      audioRef.current?.play();
+    try {
+      setIsLoading(true);
+      setError(null);
+
+      if (isPlaying) {
+        audioRef.current?.pause();
+      } else {
+        await audioRef.current?.play();
+        toast({
+          title: "Reproduciendo",
+          description: `${currentSong.title} - ${currentSong.artist}`,
+        });
+      }
+      setIsPlaying(!isPlaying);
+    } catch (err) {
+      setError("Error al reproducir el audio");
+      toast({
+        title: "Error",
+        description: "No se pudo reproducir la canción",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
     }
-    setIsPlaying(!isPlaying);
   };
 
   const selectSong = (song: Song) => {
     setCurrentSong(song);
     setIsPlaying(false);
+    setError(null);
+    // setShowPlaylist(false);
+    toast({
+      title: "Canción seleccionada",
+      description: `${song.title} - ${song.artist}`,
+    });
     // setShowPlaylist(false);
   };
 
@@ -150,13 +180,26 @@ export const Relief = ({onBack}: DesahogoProps) => {
                       <p className="text-sm text-muted-foreground">{currentSong.artist}</p>
                     </div>
 
+                    {error && (
+                        <Alert className="mb-4">
+                          <AlertCircle className="h-4 w-4" />
+                          <AlertDescription>{error}</AlertDescription>
+                        </Alert>
+                    )}
+
                     <div className="flex justify-center mb-4">
                       <Button
                           onClick={handlePlayPause}
                           className="w-16 h-16 rounded-full bg-primary hover:bg-primary/90"
                           size="icon"
                       >
-                        {isPlaying ? <Pause className="h-6 w-6"/> : <Play className="h-6 w-6 ml-1"/>}
+                        {isLoading ? (
+                            <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                        ) : isPlaying ? (
+                            <Pause className="h-6 w-6" />
+                        ) : (
+                            <Play className="h-6 w-6 ml-1" />
+                        )}
                       </Button>
                     </div>
 
