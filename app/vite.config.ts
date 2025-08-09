@@ -13,7 +13,7 @@ export default defineConfig(({ mode }) => ({
     VitePWA({
       registerType: "autoUpdate",
       manifest: {
-        name: "NeuroLog App",
+        name: "NeuroLog",
         short_name: "NeuroLog",
         description: "Aplicación NeuroLog",
         theme_color: "#071b46",

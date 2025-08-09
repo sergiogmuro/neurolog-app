@@ -1,9 +1,9 @@
-import {useState, useRef} from "react";
+import {useState, useRef, useEffect} from "react";
 import {Card} from "@/components/ui/card";
 import {Button} from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { useToast } from "@/hooks/use-toast";
+import {Skeleton} from "@/components/ui/skeleton";
+import {Alert, AlertDescription} from "@/components/ui/alert";
+import {useToast} from "@/hooks/use-toast";
 import {ArrowLeft, Play, Pause, Music, Volume2, AlertCircle} from "lucide-react";
 
 interface Song {
@@ -19,37 +19,52 @@ const relaxingSongs: Song[] = [
     id: 1,
     title: "Lluvia Suave",
     artist: "Sonidos de la Naturaleza",
-    duration: "10:00",
-    url: "/assets/relief/heavy-doom-metal-instrumental-288971.mp3"
+    duration: "1:49",
+    url: "/assets/relief/calming-rain.mp3"
   },
   {
     id: 2,
     title: "Meditación Profunda",
     artist: "Paz Interior",
-    duration: "8:30",
-    url: "/assets/relief/heavy-drag-mid-tempo-nu-metal-instrumental-379674.mp3"
+    duration: "1:37",
+    url: "/assets/relief/meditation-deep.mp3"
   },
   {
     id: 3,
     title: "Respiración Consciente",
     artist: "Mindfulness",
-    duration: "12:15",
-    url: "/placeholder-audio.mp3"
+    duration: "1:41",
+    url: "/assets/relief/mindfulness.mp3"
   },
   {
     id: 4,
     title: "Ondas del Océano",
     artist: "Relajación Total",
-    duration: "15:00",
-    url: "/placeholder-audio.mp3"
+    duration: "1:15",
+    url: "/assets/relief/ocean-waves.mp3"
   },
   {
     id: 5,
     title: "Viento en el Bosque",
     artist: "Naturaleza Pura",
-    duration: "9:45",
-    url: "/placeholder-audio.mp3"
-  }
+    duration: "2:07",
+    url: "/assets/relief/wind.mp3"
+  },
+  {
+    id: 6,
+    title: "Descarga Rock",
+    artist: "Heavy metal instrumental",
+    duration: "3:03",
+    url: "/assets/relief/heavy-doom-metal-instrumental-288971.mp3"
+  },
+  {
+    id: 7,
+    title: "Heavy Rock ",
+    artist: "Heavy metal rock instrumental mid tempo",
+    duration: "4:02",
+    url: "/assets/relief/heavy-drag-mid-tempo-nu-metal-instrumental-379674.mp3"
+  },
+
 ];
 
 interface DesahogoProps {
@@ -63,25 +78,26 @@ export const Relief = ({onBack}: DesahogoProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const audioRef = useRef<HTMLAudioElement>(null);
-  const { toast } = useToast();
-
+  const {toast} = useToast();
+  const [playOnSelect, setPlayOnSelect] = useState(false);
   const handlePlayPause = async () => {
-    if (!currentSong) return;
+    if (!currentSong || !audioRef.current) return;
 
     try {
       setIsLoading(true);
       setError(null);
 
       if (isPlaying) {
-        audioRef.current?.pause();
+        audioRef.current.pause();
+        setIsPlaying(false);
       } else {
-        await audioRef.current?.play();
+        await audioRef.current.play();
+        setIsPlaying(true);
         toast({
           title: "Reproduciendo",
           description: `${currentSong.title} - ${currentSong.artist}`,
         });
       }
-      setIsPlaying(!isPlaying);
     } catch (err) {
       setError("Error al reproducir el audio");
       toast({
@@ -89,22 +105,69 @@ export const Relief = ({onBack}: DesahogoProps) => {
         description: "No se pudo reproducir la canción",
         variant: "destructive",
       });
+      setIsPlaying(false);
     } finally {
       setIsLoading(false);
     }
   };
 
+// al seleccionar una canción: seteamos currentSong y pedimos playOnSelect
   const selectSong = (song: Song) => {
-    setCurrentSong(song);
-    setIsPlaying(false);
-    setError(null);
-    // setShowPlaylist(false);
-    toast({
-      title: "Canción seleccionada",
-      description: `${song.title} - ${song.artist}`,
-    });
-    // setShowPlaylist(false);
+    if (song == currentSong) {
+      handlePlayPause()
+    } else {
+      setCurrentSong(song);
+      setError(null);
+      setPlayOnSelect(true);         // <- trigger para el efecto que reproduce
+      toast({
+        title: "Canción seleccionada",
+        description: `${song.title} - ${song.artist}`,
+      });
+    }
   };
+
+  useEffect(() => {
+    if (!currentSong || !playOnSelect || !audioRef.current) return;
+
+    let mounted = true;
+    const start = async () => {
+      try {
+        setIsLoading(true);
+        setError(null);
+
+        // Si el <audio> tiene src vinculado a currentSong (recomendado),
+        // aquí el DOM ya fue actualizado y audioRef.current.src contiene la url correcta.
+        await audioRef.current.play();
+
+        if (!mounted) return;
+        setIsPlaying(true);
+        toast({
+          title: "Reproduciendo",
+          description: `${currentSong.title} - ${currentSong.artist}`,
+        });
+      } catch (err) {
+        if (!mounted) return;
+        setError("Error al reproducir el audio");
+        setIsPlaying(false);
+        toast({
+          title: "Error",
+          description: "No se pudo reproducir la canción",
+          variant: "destructive",
+        });
+      } finally {
+        if (mounted) {
+          setIsLoading(false);
+          setPlayOnSelect(false); // resetear flag
+        }
+      }
+    };
+
+    start();
+
+    return () => {
+      mounted = false;
+    };
+  }, [currentSong, playOnSelect]);
 
   const startMusicTherapy = () => {
     setShowPlaylist(true);
@@ -182,7 +245,7 @@ export const Relief = ({onBack}: DesahogoProps) => {
 
                     {error && (
                         <Alert className="mb-4">
-                          <AlertCircle className="h-4 w-4" />
+                          <AlertCircle className="h-4 w-4"/>
                           <AlertDescription>{error}</AlertDescription>
                         </Alert>
                     )}
@@ -194,11 +257,12 @@ export const Relief = ({onBack}: DesahogoProps) => {
                           size="icon"
                       >
                         {isLoading ? (
-                            <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                            <div
+                                className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin"/>
                         ) : isPlaying ? (
-                            <Pause className="h-6 w-6" />
+                            <Pause className="h-6 w-6"/>
                         ) : (
-                            <Play className="h-6 w-6 ml-1" />
+                            <Play className="h-6 w-6 ml-1"/>
                         )}
                       </Button>
                     </div>

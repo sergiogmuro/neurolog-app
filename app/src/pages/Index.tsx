@@ -30,7 +30,7 @@ const Index = () => {
   };
 
   return (
-      <div className="cosmic-bg min-h-screen pt-16 pb-24 px-6">
+      <div className="cosmic-bg min-h-screen pt-6 pb-24 px-6">
         <div className="relative" style={{fontFamily: 'Raleway', fontWeight: 300}}>
           {renderCurrentView()}
           <Navigation currentView={currentView} onViewChange={setCurrentView}/>
