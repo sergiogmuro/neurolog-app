@@ -12,5 +12,6 @@ WORKDIR /var/www/html
 COPY . .
 
 RUN composer install --no-interaction --optimize-autoloader --no-dev
+RUN chmod +x ./deploy.sh
 
 CMD ["php-fpm"]
