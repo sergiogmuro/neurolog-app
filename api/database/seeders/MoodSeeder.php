@@ -18,7 +18,7 @@ class MoodSeeder extends Seeder
         ];
 
         foreach ($moods as $mood) {
-            Mood::create($mood);
+            Mood::updateOrCreate(['name' => $mood['name']], $mood);
         }
     }
 }

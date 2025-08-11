@@ -11,4 +11,7 @@ php artisan route:cache
 echo "Running migrations..."
 php artisan migrate --force
 
+echo "Running migrations..."
+php artisan db:seed --force
+
 php artisan serve --host=0.0.0.0 --port=${API_PORT}
