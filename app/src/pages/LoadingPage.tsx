@@ -1,27 +1,27 @@
 import { useEffect, useState } from "react";
 import { Card } from "@/components/ui/card.tsx";
-import axiosClient from "@/path/to/axiosClient";
+import axiosClient from "@/api/axiosClient.ts";
 
 const LoadingPage = () => {
   const [serverHealthy, setServerHealthy] = useState<boolean | null>(null);
   const [checking, setChecking] = useState(true);
 
   useEffect(() => {
-    const source = axiosClient.CancelToken.source();
+    const controller = new AbortController();
 
     const timeoutId = setTimeout(() => {
-      source.cancel("Timeout de health check");
+      controller.abort();
     }, 5000);
 
     axiosClient
-        .get("/healthz", { cancelToken: source.token })
+        .get("/healthz", { signal: controller.signal })
         .then(response => {
           if (response.status === 200) setServerHealthy(true);
           else setServerHealthy(false);
         })
         .catch(error => {
-          if (axiosClient.isCancel(error)) {
-            console.warn("Health check cancelado por timeout");
+          if (error.name === "CanceledError") {
+            console.warn("Health check aborted due to timeout");
           }
           setServerHealthy(false);
         })
@@ -32,7 +32,7 @@ const LoadingPage = () => {
 
     return () => {
       clearTimeout(timeoutId);
-      source.cancel("Cleanup health check");
+      controller.abort();
     };
   }, []);
 
