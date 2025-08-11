@@ -11,26 +11,30 @@ export const moodOptions: MoodOption[] = [
   {
     emoji: <Frown size={40} strokeWidth={2} stroke={`#996ba3`} fill="yellow"/>,
     label: "Triste",
-    value: "sad",
+    value: "1",
   },
   {
     emoji: <Meh size={40} strokeWidth={2} stroke={`#996ba3`} fill="pink"/>,
     label: "Neutral",
-    value: "neutral",
+    value: "2",
   },
   {
     emoji: <Smile size={40} strokeWidth={2} stroke={`#996ba3`} fill="lightblue"/>,
     label: "Bien",
-    value: "good",
+    value: "3",
   },
   {
     emoji: <Smile size={40} strokeWidth={2} stroke={`#996ba3`} fill="green"/>,
     label: "Super",
-    value: "great",
+    value: "4",
   },
   {
     emoji: <Laugh size={40} strokeWidth={2} stroke={`#996ba3`} fill="orange"/>,
     label: "Excelente",
-    value: "excellent",
+    value: "5",
   },
 ];
+
+export const getMoodByValue = (value: string) => {
+  return moodOptions.find(mood => mood.value === value) || null;
+};

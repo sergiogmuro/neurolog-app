@@ -4,7 +4,11 @@ import {moodOptions} from "@/interfaces/moods.tsx";
 import {useState} from "react";
 import {registerMood} from "@/api/moodService.ts";
 
-export const MoodSelector = () => {
+interface MoodSelector {
+  setMoodId: number
+}
+
+export const MoodSelector = ({setMoodId}: MoodSelector) => {
   const [selectedMood, setSelectedMood] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -13,9 +17,10 @@ export const MoodSelector = () => {
 
     try {
       setLoading(true);
-      const result = await registerMood({ mood: selectedMood });
+      const result = await registerMood({mood_id: selectedMood});
       console.log("✅ Emoción registrada:", result);
 
+      setMoodId(result?.mood_id ?? 0)
       // Aquí puedes mostrar un toast o feedback visual
     } catch (error) {
       console.error("❌ Error al registrar emoción", error);
@@ -24,7 +29,7 @@ export const MoodSelector = () => {
     }
 
     // 🔊 Reproducir sonido
-    const audio = new Audio("/assets/sounds/blink.mp3"); // ruta pública en tu proyecto
+    const audio = new Audio("/assets/sounds/audio_fad29823bb.mp3"); // ruta pública en tu proyecto
     audio.play().catch((err) => console.error("Error reproduciendo audio:", err));
   };
 

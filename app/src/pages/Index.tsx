@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {MoodSelector} from "@/components/MoodSelector";
 import {EmotionalHistory} from "@/components/EmotionalHistory";
 import {MoodCalendar} from "@/components/MoodCalendar";
@@ -9,9 +9,53 @@ import "@fontsource/raleway/400.css";
 import "@fontsource/raleway/500.css";
 import "@fontsource/raleway/600.css";
 import {Relief} from "@/components/Relief.tsx";
+import {Login} from "@/components/Login";
+import {getAnonId, requestAnonId} from "@/api/InitSession.tsx";
+import LoadingPage from "@/pages/LoadingPage.tsx";
 
 const Index = () => {
-  const [currentView, setCurrentView] = useState("home");
+  const [currentView, setCurrentView] = useState("login");
+  const [userData, setUserData] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [anonId, setAnonId] = useState<string | null>(null);
+  const [moodId, setMoodId] = useState<number>(undefined);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const handleLogin = (user: any) => {
+    setUserData(user);
+    setIsLoggedIn(true);
+    setCurrentView("home");
+  };
+
+  const handleLogout = () => {
+    setUserData(null);
+    setIsLoggedIn(false);
+    setCurrentView("login");
+  }
+
+  useEffect(() => {
+    setIsLoading(true)
+    setAnonId(getAnonId);
+    if (!anonId) {
+      requestAnonId().then(setAnonId)
+    }
+  }, []);
+
+  useEffect(() => {
+    if (anonId) {
+      setIsLoading(false)
+    }
+  }, [anonId]);
+
+  useEffect(() => {
+    if (moodId) {
+      setCurrentView('history')
+    }
+  }, [moodId]);
+
+  if (!anonId) {
+    return <LoadingPage/>
+  }
 
   const renderCurrentView = () => {
     switch (currentView) {
@@ -20,12 +64,20 @@ const Index = () => {
       case "calendar":
         return <MoodCalendar/>;
       case "profile":
-        return <Profile onDesahogoClick={() => setCurrentView("relief")}/>;
+        if (!isLoggedIn) {
+          return <Login onLogin={handleLogin}/>;
+        } else {
+          return <Profile
+              onReliefClick={() => setCurrentView("relief")}
+              userData={userData}
+              onLogout={handleLogout}
+          />
+        }
       case "relief":
         return <Relief onBack={() => setCurrentView("profile")}/>;
       case "home":
       default:
-        return <MoodSelector/>;
+        return <MoodSelector setMoodId={setMoodId}/>;
     }
   };
 
@@ -33,7 +85,9 @@ const Index = () => {
       <div className="cosmic-bg min-h-screen pt-6 pb-24 px-6">
         <div className="relative" style={{fontFamily: 'Raleway', fontWeight: 300}}>
           {renderCurrentView()}
-          <Navigation currentView={currentView} onViewChange={setCurrentView}/>
+          {currentView == "login" || currentView !== "home" &&
+              <Navigation currentView={currentView} onViewChange={setCurrentView}/>
+          }
         </div>
       </div>
   );

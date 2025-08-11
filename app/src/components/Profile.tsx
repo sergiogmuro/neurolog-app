@@ -1,12 +1,40 @@
-import {Card} from "@/components/ui/card";
-import {Button} from "@/components/ui/button";
-import {Settings, Bell, Heart, Target, Award} from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { Settings, Bell, Heart, Target, Award, User, Mail, MapPin, LogOut, Calendar } from "lucide-react";
 
 interface ProfileProps {
-  onDesahogoClick: () => void;
+  onReliefClick: () => void;
+  userData?: {
+    id: string;
+    name: string;
+    email: string;
+    avatar: string;
+    joinDate: string;
+    streak: number;
+    weeklyAverage: number;
+    totalSessions: number;
+    favoriteEmojis: string[];
+  };
+  onLogout?: () => void;
 }
 
-export const Profile = ({ onDesahogoClick }: ProfileProps) => {
+export const Profile = ({ onReliefClick, userData, onLogout }: ProfileProps) => {
+  const defaultUserData = {
+    id: "1",
+    name: "María García",
+    email: "maria@ejemplo.com",
+    avatar: "/placeholder.svg",
+    joinDate: "2024-01-15",
+    streak: 15,
+    weeklyAverage: 4.3,
+    totalSessions: 45,
+    favoriteEmojis: ["😊", "😌", "😄"]
+  };
+
+  const user = userData || defaultUserData;
+
   return (
       <div className="max-w-md mx-auto">
         {/* Profile Header */}
@@ -21,13 +49,55 @@ export const Profile = ({ onDesahogoClick }: ProfileProps) => {
           </p>
         </div>
 
+        <Card className="glass-card rounded-2xl p-6 mb-6">
+          <div className="flex items-center space-x-4 mb-4">
+            <Avatar className="h-16 w-16">
+              <AvatarImage src={user.avatar} alt={user.name} />
+              <AvatarFallback className="bg-gradient-to-br from-purple-400 to-pink-400 text-white">
+                {user.name.split(' ').map(n => n[0]).join('')}
+              </AvatarFallback>
+            </Avatar>
+            <div className="flex-1">
+              <h1 className="text-xl font-bold text-foreground">{user.name}</h1>
+              <div className="flex items-center text-sm text-muted-foreground mb-1">
+                <Mail className="h-3 w-3 mr-1" />
+                {user.email}
+              </div>
+              <div className="flex items-center text-sm text-muted-foreground">
+                <Calendar className="h-3 w-3 mr-1" />
+                Miembro desde {new Date(user.joinDate).toLocaleDateString()}
+              </div>
+            </div>
+            {onLogout && (
+                <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={onLogout}
+                    className="text-muted-foreground hover:text-foreground"
+                >
+                  <LogOut className="h-4 w-4" />
+                </Button>
+            )}
+          </div>
+
+          {/* Favorite Emojis */}
+          <div className="flex items-center space-x-2 mb-4">
+            <span className="text-sm text-muted-foreground">Estados favoritos:</span>
+            {user.favoriteEmojis.map((emoji, index) => (
+                <Badge key={index} variant="secondary" className="text-base">
+                  {emoji}
+                </Badge>
+            ))}
+          </div>
+        </Card>
+
         {/* Stats Cards */}
         <div className="grid grid-cols-2 gap-4 mb-6">
           <Card className="glass-card rounded-xl p-4 text-center">
             <div className="flex items-center justify-center mb-2">
               <Target className="text-accent" size={20}/>
             </div>
-            <div className="text-2xl font-bold text-foreground">15</div>
+            <div className="text-2xl font-bold text-foreground">{user.streak}</div>
             <div className="text-xs text-muted-foreground">Días seguidos</div>
           </Card>
 
@@ -35,7 +105,7 @@ export const Profile = ({ onDesahogoClick }: ProfileProps) => {
             <div className="flex items-center justify-center mb-2">
               <Award className="text-yellow-400" size={20}/>
             </div>
-            <div className="text-2xl font-bold text-foreground">4.3</div>
+            <div className="text-2xl font-bold text-foreground">{user.weeklyAverage}</div>
             <div className="text-xs text-muted-foreground">Promedio semanal</div>
           </Card>
         </div>
@@ -50,7 +120,7 @@ export const Profile = ({ onDesahogoClick }: ProfileProps) => {
             procesarlos mejor.
           </p>
           <Button
-              onClick={onDesahogoClick}
+              onClick={onReliefClick}
               className="register-button w-full text-primary-foreground button-primary"
           >
             Momento de desahogo

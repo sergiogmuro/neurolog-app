@@ -1,17 +1,18 @@
 version: '3.8'
 
 services:
-  app:
-    build: ./app
-    container_name: neurolog_app
-    restart: always
-    environment:
-      - NODE_ENV=development
-    volumes:
-      - ./app:/app
-    ports:
-      - "5173:5173"
-    command: npm run dev -- --host
+#  app:
+#    build: ./app
+#    container_name: neurolog_app
+#    platform: linux/amd64
+#    restart: always
+#    environment:
+#      - NODE_ENV=development
+#    volumes:
+#      - ./app:/app
+#    ports:
+#      - "5173:5173"
+#    command: npm run dev -- --host
 
   api:
     build: ./api
@@ -23,12 +24,13 @@ services:
       - DB_DATABASE=${DB_DATABASE}
       - DB_USERNAME=${DB_USERNAME}
       - DB_PASSWORD=${DB_PASSWORD}
+      - DB_ROOT_PASSWORD=${DB_ROOT_DATABASE}
     depends_on:
       - db
     volumes:
       - ./api:/var/www/html
     expose:
-      - "9000"
+      - "${API_PORT}:9000"
 
   nginx:
     image: nginx:stable
@@ -47,6 +49,7 @@ services:
     container_name: neurolog_db
     restart: always
     environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: yes
       MYSQL_ROOT_PASSWORD: ${DB_ROOT_DATABASE}
       MYSQL_DATABASE: ${DB_DATABASE}
       MYSQL_USER: ${DB_USERNAME}

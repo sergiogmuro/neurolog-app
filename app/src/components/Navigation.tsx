@@ -7,7 +7,7 @@ interface NavigationProps {
 
 export const Navigation = ({ currentView, onViewChange }: NavigationProps) => {
   const navItems = [
-    { id: "home", icon: Home, label: "Inicio" },
+    // { id: "home", icon: Home, label: "Inicio" },
     { id: "history", icon: History, label: "Historial" },
     { id: "calendar", icon: Calendar, label: "Calendario" },
     { id: "profile", icon: User, label: "Perfil" },
