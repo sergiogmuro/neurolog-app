@@ -1,20 +1,9 @@
 import {Card} from "@/components/ui/card";
-import {TrendingUp, Calendar, Clock} from "lucide-react";
+import {TrendingUp, Calendar, Clock, TrendingUpDown, TrendingDown} from "lucide-react";
 import {useEffect, useState} from "react";
 import {getHistoryMood} from "@/api/moodService.ts";
 import {format, isToday, isYesterday, differenceInCalendarDays, parseISO} from "date-fns";
 import {getMoodByValue} from "@/interfaces/moods.tsx";
-
-/*
-
-const mockHistoryData = [
-  {date: "Hoy", time: "14:30", mood: "😊", label: "Bien", color: "bg-green-500"},
-  {date: "Hoy", time: "09:15", mood: "😄", label: "Muy Bien", color: "bg-yellow-500"},
-  {date: "Ayer", time: "18:45", mood: "😐", label: "Neutral", color: "bg-gray-500"},
-  {date: "Ayer", time: "12:20", mood: "😊", label: "Bien", color: "bg-green-500"},
-  {date: "2 días", time: "16:30", mood: "🤩", label: "Excelente", color: "bg-orange-500"},
-];
-*/
 
 function formatMoodDateTime(isoDate: string) {
   const dateObj = parseISO(isoDate);
@@ -37,11 +26,16 @@ function formatMoodDateTime(isoDate: string) {
 
 export const EmotionalHistory = () => {
   const [moodHistoryData, setMoodHistoryData] = useState<any>(undefined);
+  const [moodLastWeekAvg, setMoodLastWeekAvg] = useState(0)
+  const [moodLastWeekCount, setMoodLastWeekCount] = useState(0)
 
   useEffect(() => {
     if (!moodHistoryData) {
       getHistoryMood().then(response => {
-        const data = response.map(mood => {
+        setMoodLastWeekAvg(response.last_week_avg)
+        setMoodLastWeekCount(response.last_week_count)
+
+        const data = response.moods.map(mood => {
           const {dateLabel, timeLabel} = formatMoodDateTime(mood.created_at);
 
           let color = "bg-gray-500";
@@ -92,16 +86,24 @@ export const EmotionalHistory = () => {
           </div>
           <div className="grid grid-cols-3 gap-4 text-center">
             <div>
-              <div className="text-2xl font-bold text-foreground">4.2</div>
+              <div className="text-2xl font-bold text-foreground">{moodLastWeekAvg}</div>
               <div className="text-xs text-muted-foreground">Promedio</div>
             </div>
             <div>
-              <div className="text-2xl font-bold text-accent">12</div>
+              <div className="text-2xl font-bold text-accent">{moodLastWeekCount}</div>
               <div className="text-xs text-muted-foreground">Registros</div>
             </div>
             <div>
-              <div className="text-2xl font-bold text-green-400">↗</div>
-              <div className="text-xs text-muted-foreground">Tendencia</div>
+              <div className="text-2xl font-bold text-green-400 justify-center inline-flex">
+                {moodLastWeekAvg > 4 ?
+                    <TrendingUp className="text-accent" size={30}/>
+                    : moodLastWeekAvg > 2.5 ?
+                        <TrendingUp className="text-yellow-300" size={30}/>
+                        :
+                        <TrendingDown className="text-orange-200" size={30}/>
+                }
+              </div>
+              {/*<div className="text-xs text-muted-foreground">Tendencia</div>*/}
             </div>
           </div>
         </Card>

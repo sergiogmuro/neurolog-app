@@ -12,6 +12,7 @@ import {Relief} from "@/components/Relief.tsx";
 import {Login} from "@/components/Login";
 import {getAnonId, requestAnonId} from "@/api/InitSession.tsx";
 import LoadingPage from "@/pages/LoadingPage.tsx";
+import {Home} from "@/components/Home.tsx";
 
 const Index = () => {
   const [currentView, setCurrentView] = useState("login");
@@ -24,13 +25,13 @@ const Index = () => {
   const handleLogin = (user: any) => {
     setUserData(user);
     setIsLoggedIn(true);
-    setCurrentView("home");
+    setCurrentView("profile");
   };
 
   const handleLogout = () => {
     setUserData(null);
     setIsLoggedIn(false);
-    setCurrentView("login");
+    setCurrentView("profile");
   }
 
   useEffect(() => {
@@ -75,14 +76,16 @@ const Index = () => {
         }
       case "relief":
         return <Relief onBack={() => setCurrentView("profile")}/>;
+      case "mood":
+        return <MoodSelector setMoodId={setMoodId}/>;
       case "home":
       default:
-        return <MoodSelector setMoodId={setMoodId}/>;
+        return <Home setMoodId={setMoodId}/>;
     }
   };
 
   return (
-      <div className="cosmic-bg min-h-screen pt-6 pb-24 px-6">
+      <div className="cosmic-bg min-h-screen pt-6 pb-24 px-6 content-center">
         <div className="relative" style={{fontFamily: 'Raleway', fontWeight: 300}}>
           {renderCurrentView()}
           {currentView == "login" || currentView !== "home" &&

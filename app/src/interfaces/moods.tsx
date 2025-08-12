@@ -9,27 +9,27 @@ export interface MoodOption {
 
 export const moodOptions: MoodOption[] = [
   {
-    emoji: <Frown size={40} strokeWidth={2} stroke={`#996ba3`} fill="yellow"/>,
+    emoji: <Frown size={40} strokeWidth={2} stroke={`#000`} fill="yellow"/>,
     label: "Triste",
     value: "1",
   },
   {
-    emoji: <Meh size={40} strokeWidth={2} stroke={`#996ba3`} fill="pink"/>,
+    emoji: <Meh size={40} strokeWidth={2} stroke={`#000`} fill="pink"/>,
     label: "Neutral",
     value: "2",
   },
   {
-    emoji: <Smile size={40} strokeWidth={2} stroke={`#996ba3`} fill="lightblue"/>,
+    emoji: <Smile size={40} strokeWidth={2} stroke={`#000`} fill="lightblue"/>,
     label: "Bien",
     value: "3",
   },
   {
-    emoji: <Smile size={40} strokeWidth={2} stroke={`#996ba3`} fill="green"/>,
+    emoji: <Smile size={40} strokeWidth={2} stroke={`#000`} fill="green"/>,
     label: "Super",
     value: "4",
   },
   {
-    emoji: <Laugh size={40} strokeWidth={2} stroke={`#996ba3`} fill="orange"/>,
+    emoji: <Laugh size={40} strokeWidth={2} stroke={`#000`} fill="orange"/>,
     label: "Excelente",
     value: "5",
   },

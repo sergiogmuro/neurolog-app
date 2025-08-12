@@ -12,13 +12,13 @@ const moodEmojis: Record<string, string> = {
 
 // Mock data for calendar
 const mockCalendarData: Record<string, string> = {
-  "2024-01-15": "good",
-  "2024-01-16": "great",
-  "2024-01-17": "neutral",
-  "2024-01-18": "good",
-  "2024-01-19": "excellent",
-  "2024-01-20": "good",
-  "2024-01-21": "great",
+  "2025-07-15": "good",
+  "2025-07-16": "great",
+  "2025-07-17": "neutral",
+  "2025-07-18": "good",
+  "2025-07-19": "excellent",
+  "2025-07-20": "good",
+  "2025-07-21": "great",
 };
 
 export const MoodCalendar = () => {
