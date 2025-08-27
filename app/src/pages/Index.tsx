@@ -8,7 +8,7 @@ import "@fontsource/raleway/300.css";
 import "@fontsource/raleway/400.css";
 import "@fontsource/raleway/500.css";
 import "@fontsource/raleway/600.css";
-import {Relief} from "@/components/Relief.tsx";
+import {Relief} from "@/components/relief/Relief.tsx";
 import {Login} from "@/components/Login";
 import {getAnonId, requestAnonId} from "@/api/InitSession.tsx";
 import LoadingPage from "@/pages/LoadingPage.tsx";
@@ -75,7 +75,7 @@ const Index = () => {
           />
         }
       case "relief":
-        return <Relief onBack={() => setCurrentView("profile")}/>;
+        return <Relief />;
       case "mood":
         return <MoodSelector setMoodId={setMoodId}/>;
       case "home":

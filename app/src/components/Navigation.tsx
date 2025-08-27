@@ -1,4 +1,4 @@
-import {Home, History, User, Calendar, Unlink} from "lucide-react";
+import {Home, History, User, Calendar, Unlink, Smile} from "lucide-react";
 
 interface NavigationProps {
   currentView: string;
@@ -7,7 +7,7 @@ interface NavigationProps {
 
 export const Navigation = ({ currentView, onViewChange }: NavigationProps) => {
   const navItems = [
-    { id: "mood", icon: Home, label: "Estado" },
+    { id: "mood", icon: Smile, label: "Estado" },
     { id: "history", icon: History, label: "Historial" },
     { id: "relief", icon: Unlink, label: "Desahogo" },
     { id: "calendar", icon: Calendar, label: "Calendario" },

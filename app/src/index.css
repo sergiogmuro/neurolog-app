@@ -131,7 +131,23 @@
         background: var(--gradient-cosmic);
         min-height: 100vh;
         overflow-x: hidden;
+        transition: background 1s ease-in-out;
     }
+
+    /* Ambient background mode for music playback */
+    body.music-ambient {
+        background:
+                radial-gradient(circle at 20% 80%, hsl(var(--primary) / 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, hsl(var(--secondary) / 0.12) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, hsl(var(--accent) / 0.08) 0%, transparent 50%),
+                var(--gradient-cosmic);
+        animation: ambient-breathe 8s ease-in-out infinite alternate;
+        overflow: hidden;
+        height: 100vh;
+        position: fixed;
+        inset: 0;
+    }
+
 }
 
 @layer components {
@@ -206,3 +222,144 @@
         background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)));
     }
 }
+
+/* Relaxing light effects for music player */
+.playing-ambient {
+    background: linear-gradient(
+            135deg,
+            hsl(15deg 66.95% 20.9% / 59%) 0% 0%,
+            hsl(51.1deg 100% 70% / 73%) 100%
+    );
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    opacity: 0;
+    display: block;
+    transition: opacity 2s ease;
+    z-index: 1; /* detrás del contenido */
+    pointer-events: none;
+}
+
+.playing-ambient.active {
+    opacity: 1;
+    pointer-events: inherit;
+}
+
+.relaxing-lights-1 {
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, hsl(var(--primary) / 0.1) 0%, transparent 70%);
+    animation: float-1 12s ease-in-out infinite;
+}
+
+.relaxing-lights-2 {
+    position: absolute;
+    top: -30%;
+    right: -30%;
+    width: 150%;
+    height: 150%;
+    background: radial-gradient(circle, hsl(var(--secondary) / 0.08) 0%, transparent 60%);
+    animation: float-2 15s ease-in-out infinite reverse;
+}
+
+.relaxing-lights-3 {
+    position: absolute;
+    bottom: -40%;
+    left: -40%;
+    width: 180%;
+    height: 180%;
+    background: radial-gradient(circle, hsl(var(--accent) / 0.06) 0%, transparent 65%);
+    animation: float-3 18s ease-in-out infinite;
+}
+
+@keyframes float-1 {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); opacity: 0.3; }
+    33% { transform: translate(30px, -30px) rotate(120deg); opacity: 0.6; }
+    66% { transform: translate(-20px, 20px) rotate(240deg); opacity: 0.4; }
+}
+
+@keyframes float-2 {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); opacity: 0.2; }
+    50% { transform: translate(-40px, 30px) rotate(180deg); opacity: 0.5; }
+}
+
+@keyframes float-3 {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); opacity: 0.25; }
+    25% { transform: translate(20px, -40px) rotate(90deg); opacity: 0.4; }
+    75% { transform: translate(-30px, -20px) rotate(270deg); opacity: 0.3; }
+}
+
+@keyframes phraseFadeCycle {
+    0%   { opacity: 0; transform: translateY(8px) scale(0.98); }
+    12%  { opacity: 1; transform: translateY(0)    scale(1);    } /* fade-in */
+    88%  { opacity: 1; transform: translateY(0)    scale(1);    } /* hold */
+    100% { opacity: 0; transform: translateY(-6px) scale(0.98); } /* fade-out */
+}
+
+.phrase-animation {
+    animation: phraseFadeCycle 8s ease-in-out both; /* 8s = tu intervalo */
+}
+
+/* Accesibilidad opcional */
+@media (prefers-reduced-motion: reduce) {
+    .phrase-animation {
+        animation: none;
+    }
+}
+
+/* Global ambient breathing effect */
+@keyframes ambient-breathe {
+    0% {
+        background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%;
+        filter: brightness(1) saturate(1);
+    }
+    100% {
+        background-size: 120% 120%, 120% 120%, 120% 120%, 100% 100%;
+        filter: brightness(1.1) saturate(1.2);
+    }
+}
+
+/* Floating ambient particles for full background */
+body.music-ambient::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image:
+            radial-gradient(3px 3px at 15% 25%, hsl(var(--primary) / 0.4), transparent),
+            radial-gradient(2px 2px at 85% 75%, hsl(var(--secondary) / 0.3), transparent),
+            radial-gradient(2px 2px at 45% 85%, hsl(var(--accent) / 0.3), transparent),
+            radial-gradient(1px 1px at 75% 15%, hsl(var(--primary) / 0.5), transparent),
+            radial-gradient(2px 2px at 25% 65%, hsl(var(--secondary) / 0.4), transparent);
+    background-repeat: repeat;
+    background-size: 300px 200px;
+    animation: ambient-float 5s ease-in-out infinite alternate;
+    pointer-events: none;
+    z-index: -1;
+}
+
+.music-ambient-wrapper {
+    display: flex;
+    align-content: space-between;
+    flex-flow: column;
+    justify-content: space-between;
+    height: 90%;
+}
+
+@keyframes ambient-float {
+    0% {
+        opacity: 0.6;
+        transform: translateY(0px) rotate(0deg);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(-20px) rotate(5deg);
+    }
+}
+
