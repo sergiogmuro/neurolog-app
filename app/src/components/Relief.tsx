@@ -176,16 +176,11 @@ export const Relief = ({onBack}: DesahogoProps) => {
   return (
       <div className="max-w-md mx-auto">
         {/* Header */}
-        <div className="flex items-center mb-8">
-          <Button
-              variant="ghost"
-              size="icon"
-              onClick={onBack}
-              className="mr-4 rounded-full"
-          >
-            <ArrowLeft className="h-6 w-6"/>
-          </Button>
-          <h1 className="text-2xl font-bold text-foreground">Momento de Desahogo</h1>
+        <div className="text-center mb-8">
+          <h1 className="text-3xl font-bold text-foreground mb-2">Desahogarse</h1>
+          <p className="text-muted-foreground text-sm">
+            Tómate un momento para ti. Para calmar cualquier momento o inquietud cuando lo necesites.
+          </p>
         </div>
 
         {!showPlaylist ? (

@@ -81,7 +81,7 @@ export const EmotionalHistory = () => {
         {/* Stats Card */}
         <Card className="glass-card rounded-2xl p-6 mb-6">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-foreground">Esta semana</h3>
+            <h3 className="text-lg font-semibold text-foreground">Ultima semana</h3>
             <TrendingUp className="text-accent" size={20}/>
           </div>
           <div className="grid grid-cols-3 gap-4 text-center">
@@ -104,6 +104,14 @@ export const EmotionalHistory = () => {
                 }
               </div>
               {/*<div className="text-xs text-muted-foreground">Tendencia</div>*/}
+            </div>
+          </div>
+        </Card>
+        <Card className="glass-card rounded-2xl p-6 mb-6">
+          <div className="grid grid-cols gap-4 text-left">
+            <div>
+              <div className="text-2xl font-bold text-foreground">Esta semana tuviste</div>
+              <div className="text-2xl text-foreground">3 dias excelentes !!!</div>
             </div>
           </div>
         </Card>

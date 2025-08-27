@@ -1,4 +1,4 @@
-import { Home, History, User, Calendar } from "lucide-react";
+import {Home, History, User, Calendar, Unlink} from "lucide-react";
 
 interface NavigationProps {
   currentView: string;
@@ -7,15 +7,23 @@ interface NavigationProps {
 
 export const Navigation = ({ currentView, onViewChange }: NavigationProps) => {
   const navItems = [
-    { id: "mood", icon: Home, label: "Estado De Animo" },
+    { id: "mood", icon: Home, label: "Estado" },
     { id: "history", icon: History, label: "Historial" },
+    { id: "relief", icon: Unlink, label: "Desahogo" },
     { id: "calendar", icon: Calendar, label: "Calendario" },
     { id: "profile", icon: User, label: "Perfil" },
   ];
 
   return (
       <nav className="fixed bottom-0 left-0 right-0 z-50">
-        <div className="glass-card rounded-t-3xl border-t border-border/50 p-2">
+        <div className={
+            `glass-card-navigation ` +
+            `border-0 ` +
+            // `rounded-t-3xl ` +
+            // `border-t ` +
+            // `border-border/50 ` +
+            `p-2 `
+        }>
           <div className="flex justify-around items-center max-w-md mx-auto">
             {navItems.map((item) => {
               const Icon = item.icon;

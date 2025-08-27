@@ -111,7 +111,7 @@ export const Profile = ({ onReliefClick, userData, onLogout }: ProfileProps) => 
         </div>
 
         {/* Momento de desahogo */}
-        <Card className="glass-card rounded-2xl p-6 mb-6">
+        {/*<Card className="glass-card rounded-2xl p-6 mb-6">
           <h2 className="text-xl font-semibold text-foreground mb-4">
             Momento de desahogo
           </h2>
@@ -126,7 +126,7 @@ export const Profile = ({ onReliefClick, userData, onLogout }: ProfileProps) => 
             Momento de desahogo
           </Button>
         </Card>
-
+*/}
         {/* Settings & Options */}
         <div className="space-y-3">
           <Card className="glass-card rounded-xl p-4">

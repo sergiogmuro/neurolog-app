@@ -11,13 +11,17 @@ interface MoodSelectorComponent {
 export const MoodSelectorComponent = ({setMoodId}: MoodSelectorComponent) => {
   const [selectedMood, setSelectedMood] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [note, setNote] = useState<string>("");
 
   const handleRegister = async () => {
     if (!selectedMood) return;
 
     try {
       setLoading(true);
-      const result = await registerMood({mood_id: selectedMood});
+      const result = await registerMood({
+        mood_id: selectedMood,
+        note: note.trim() || null
+      });
       console.log("✅ Emoción registrada:", result);
 
       setMoodId(result?.mood_id ?? 0)
@@ -63,6 +67,14 @@ export const MoodSelectorComponent = ({setMoodId}: MoodSelectorComponent) => {
               </button>
           ))}
         </div>
+
+        <textarea
+            placeholder="Escribe una nota (opcional)"
+            className="w-full p-3 mb-6 rounded-lg border bg-background text-foreground focus:ring-2 focus:ring-orange-200"
+            rows={3}
+            value={note}
+            onChange={(e) => setNote(e.target.value)}
+        />
 
         <Button
             size="lg"

@@ -27,4 +27,7 @@ https://dashboard.render.com/project/prj-d0poanumcj7s73eclk4g
 
 # DB
 https://supabase.com/dashboard/project/dyulemymihamxlweexdu
+
+# Backend Monitor
+https://downtimemonkey.com/website-downtime-monitors.php
 ```
