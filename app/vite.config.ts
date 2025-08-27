@@ -17,25 +17,27 @@ export default defineConfig(({ mode }) => ({
         short_name: "NeuroLog",
         description: "Aplicación NeuroLog",
         theme_color: "#071b46",
-        background_color: "#071b46",
+        background_color: "#e3872f",
         display: "fullscreen",
         start_url: "/",
         icons: [
           {
             src: "/assets/icons/android-chrome-192x192.png",
             sizes: "192x192",
-            type: "image/png"
-          },
-          {
-            src: "/assets/icons/android-chrome-512x512.png",
-            sizes: "512x512",
-            type: "image/png"
+            type: "image/png",
+            purpose: "maskable"
           },
           {
             src: "/assets/icons/android-chrome-512x512.png",
             sizes: "512x512",
             type: "image/png",
-            purpose: "any maskable"
+            purpose: "maskable"
+          },
+          {
+            src: "/assets/icons/android-chrome-512x512.png",
+            sizes: "512x512",
+            type: "image/png",
+            purpose: "maskable"
           }
         ]
       }
