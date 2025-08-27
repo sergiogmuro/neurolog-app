@@ -107,42 +107,67 @@ export const EmotionalHistory = () => {
             </div>
           </div>
         </Card>
-        <Card className="glass-card rounded-2xl p-6 mb-6">
-          <div className="grid grid-cols gap-4 text-left">
-            <div>
-              <div className="text-2xl font-bold text-foreground">Esta semana tuviste</div>
-              <div className="text-2xl text-foreground">3 dias excelentes !!!</div>
-            </div>
-          </div>
-        </Card>
+        {moodHistoryData
+            ?
+            <Card className="glass-card rounded-2xl p-6 mb-6">
+              <div className="grid grid-cols gap-4 text-left">
+                <div>
+                  <div className="text-2xl font-bold text-foreground">Esta semana tuviste</div>
+                  <div className="text-2xl text-foreground">3 dias excelentes !!!</div>
+                </div>
+              </div>
+            </Card>
+            :
+            <Card key={1} className="glass-card rounded-2xl p-6 mb-6 animate-pulse">
+              <div className="flex grid grid-cols gap-4 text-left">
+                <div  className="flex-1 space-y-2">
+                  <div className="h-6 bg-gray-400/30 rounded w-1/2"></div>
+                  <div className="h-6 bg-gray-400/30 rounded w-1/2"></div>
+                </div>
+              </div>
+            </Card>
+        }
 
         {/* History List */}
         <div className="space-y-3">
-          {moodHistoryData && moodHistoryData.map(function (entry, index) {
-            return (
-                <Card key={index} className="glass-card rounded-xl p-4">
-                  <div className="flex items-center space-x-4">
-                    <div className={`w-12 h-12 rounded-full flex items-center justify-center ${entry.color}/20`}>
-                      <span className="text-2xl">{entry.mood}</span>
-                    </div>
-                    <div className="flex-1">
-                      <div className="flex items-center space-x-2 mb-1">
-                        <Calendar size={14} className="text-muted-foreground"/>
-                        <span className="text-sm text-foreground font-medium">{entry.date}</span>
+          {moodHistoryData
+              ? moodHistoryData.map((entry, index) => (
+                  <Card key={index} className="glass-card rounded-xl p-4">
+                    <div className="flex items-center space-x-4">
+                      <div className={`w-12 h-12 rounded-full flex items-center justify-center ${entry.color}/20`}>
+                        <span className="text-2xl">{entry.mood}</span>
                       </div>
-                      <div className="flex items-center space-x-2">
-                        <Clock size={14} className="text-muted-foreground"/>
-                        <span className="text-sm text-muted-foreground">{entry.time}</span>
+                      <div className="flex-1">
+                        <div className="flex items-center space-x-2 mb-1">
+                          <Calendar size={14} className="text-muted-foreground"/>
+                          <span className="text-sm text-foreground font-medium">{entry.date}</span>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <Clock size={14} className="text-muted-foreground"/>
+                          <span className="text-sm text-muted-foreground">{entry.time}</span>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-sm font-medium text-foreground">{entry.label}</div>
                       </div>
                     </div>
-                    <div className="text-right">
-                      <div className="text-sm font-medium text-foreground">{entry.label}</div>
+                  </Card>
+              ))
+              : // 🔹 Placeholder mientras carga
+              Array.from({length: 3}).map((_, idx) => (
+                  <Card key={idx} className="glass-card rounded-xl p-4 animate-pulse">
+                    <div className="flex items-center space-x-4">
+                      <div className="w-12 h-12 rounded-full bg-gray-400/30"></div>
+                      <div className="flex-1 space-y-2">
+                        <div className="h-4 bg-gray-400/30 rounded w-1/2"></div>
+                        <div className="h-4 bg-gray-400/20 rounded w-1/3"></div>
+                      </div>
+                      <div className="h-4 bg-gray-400/30 rounded w-10"></div>
                     </div>
-                  </div>
-                </Card>
-            )
-          })}
+                  </Card>
+              ))}
         </div>
+
       </div>
   );
 };
