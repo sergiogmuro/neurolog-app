@@ -301,7 +301,7 @@
 }
 
 .phrase-animation {
-    animation: phraseFadeCycle 8s ease-in-out both; /* 8s = tu intervalo */
+    animation: phraseFadeCycle 8s ease-in-out both;
 }
 
 /* Accesibilidad opcional */

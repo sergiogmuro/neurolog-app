@@ -159,11 +159,11 @@ export const MusicPlayer = ({}: MusicSelectorProps) => {
         audioRef.current.pause();
       } else {
         await audioRef.current.play();
-        toast({
-          title: "Reproduciendo",
-          description: `${currentSong.title} - ${currentSong.artist}`,
-          duration: 3000,
-        });
+        // toast({
+        //   title: "Reproduciendo",
+        //   description: `${currentSong.title} - ${currentSong.artist}`,
+        //   duration: 3000,
+        // });
       }
     } catch (err) {
       setError("Error al reproducir el audio");
@@ -199,10 +199,10 @@ export const MusicPlayer = ({}: MusicSelectorProps) => {
         setError(null);
         await audioRef.current.play();
 
-        toast({
-          title: "Reproduciendo",
-          description: `${currentSong.title} - ${currentSong.artist}`,
-        });
+        // toast({
+        //   title: "Reproduciendo",
+        //   description: `${currentSong.title} - ${currentSong.artist}`,
+        // });
       } catch (err) {
         setError("Error al reproducir el audio");
         toast({
@@ -224,7 +224,7 @@ export const MusicPlayer = ({}: MusicSelectorProps) => {
         {/* Reproductor actual */}
         {currentSong && (
             <Card
-                className={`glass-card p-6 relative overflow-hidden playing-ambient  ${isPlaying ? ' active' : ''}`}>
+                className={`glass-card border-0 rounded-none p-6 relative overflow-hidden playing-ambient  ${isPlaying ? ' active' : ''}`}>
               {/* Efectos de luces relajantes */}
               {isPlaying && (
                   <div className="absolute inset-0 pointer-events-none">
@@ -266,13 +266,13 @@ export const MusicPlayer = ({}: MusicSelectorProps) => {
                   <Button
                       onClick={handlePlayPause}
                       disabled={isLoading}
-                      className={`w-16 h-16 rounded-full bg-primary hover:bg-primary/90 disabled:opacity-50 transition-all duration-300 ${isPlaying ? 'shadow-lg shadow-primary/50' : ''}`}
+                      className={`w-8/12 h-16 rounded-full bg-primary bg-amber-600 hover:bg-primary/90 disabled:opacity-50 transition-all duration-300 ${isPlaying ? 'shadow-lg shadow-primary/50' : ''}`}
                       size="icon"
                   >
                     {isLoading ? (
                         <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin"/>
                     ) : isPlaying ? (
-                        <Pause className="h-6 w-6"/>
+                        <Pause className="h-6 w-4"/>
                     ) : (
                         <Play className="h-6 w-6 ml-1"/>
                     )}
