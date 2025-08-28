@@ -14,3 +14,8 @@ export const getHistoryMood = async () => {
   const response = await axiosClient.get("/mood-logs");
   return response.data;
 };
+
+export const getMonthlyHistoryMood = async (month) => {
+  const response = await axiosClient.get(`/mood-monthly/${month}`);
+  return response.data;
+};

@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 import {MoodSelector} from "@/components/MoodSelector";
-import {EmotionalHistory} from "@/components/EmotionalHistory";
+import {EmotionalHistory} from "@/components/history/EmotionalHistory";
 import {MoodCalendar} from "@/components/MoodCalendar";
 import {Profile} from "@/components/Profile";
 import {Navigation} from "@/components/Navigation";
@@ -85,7 +85,7 @@ const Index = () => {
   };
 
   return (
-      <div className="cosmic-bg min-h-screen pt-6 pb-24 px-6 content-center">
+      <div className="cosmic-bg min-h-screen pt-6 pb-24 px-6 content-center ">
         <div className="relative" style={{fontFamily: 'Raleway', fontWeight: 300}}>
           {renderCurrentView()}
           {currentView == "login" || currentView !== "home" &&

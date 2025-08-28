@@ -1,30 +1,26 @@
 import {Card} from "@/components/ui/card";
 import {ChevronLeft, ChevronRight} from "lucide-react";
-import {useState} from "react";
+import {useEffect, useState} from "react";
+import {getMonthlyHistoryMood} from "@/api/moodService.ts";
 
-const moodEmojis: Record<string, string> = {
-  sad: "😔",
-  neutral: "😐",
-  good: "😊",
-  great: "😄",
-  excellent: "🤩"
+const moodEmojis: Record<number, string> = {
+  0: "😔",   // triste
+  1: "😐",   // neutral
+  2: "😊",   // bien
+  3: "😄",   // muy bien
+  4: "🤩"    // excelente
 };
 
-// Mock data for calendar
-const mockCalendarData: Record<string, string> = {
-  "2025-07-15": "good",
-  "2025-07-16": "great",
-  "2025-07-17": "neutral",
-  "2025-07-18": "good",
-  "2025-07-19": "excellent",
-  "2025-07-20": "good",
-  "2025-07-21": "great",
-};
+interface CalendarDay {
+  day: number | null;
+  mood?: string | null;
+}
 
 export const MoodCalendar = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
+  const [days, setDays] = useState<CalendarDay[]>([]);
 
-  const getDaysInMonth = (date: Date) => {
+  const getDaysInMonth = (date: Date, moods: Record<string, string>) => {
     const year = date.getFullYear();
     const month = date.getMonth();
     const firstDay = new Date(year, month, 1);
@@ -32,46 +28,48 @@ export const MoodCalendar = () => {
     const startingDayOfWeek = firstDay.getDay();
     const daysInMonth = lastDay.getDate();
 
-    const days = [];
+    const calendar: CalendarDay[] = [];
 
-    // Add empty cells for days before the first day of the month
+    // empty slots before start of month
     for (let i = 0; i < startingDayOfWeek; i++) {
-      days.push(null);
+      calendar.push({ day: null });
     }
 
-    // Add days of the month
+    // actual days
     for (let day = 1; day <= daysInMonth; day++) {
-      days.push(day);
+      const dateString = `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+      calendar.push({ day, mood: moods[dateString] ?? null });
     }
 
-    return days;
+    return calendar;
   };
 
   const getMonthName = (date: Date) => {
-    return date.toLocaleDateString('es-ES', {month: 'long', year: 'numeric'});
+    return date.toLocaleDateString("es-ES", { month: "long", year: "numeric" });
   };
 
-  const getMoodForDate = (day: number) => {
-    const year = currentDate.getFullYear();
-    const month = currentDate.getMonth();
-    const dateString = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-    return mockCalendarData[dateString];
-  };
-
-  const navigateMonth = (direction: 'prev' | 'next') => {
-    setCurrentDate(prev => {
+  const navigateMonth = (direction: "prev" | "next") => {
+    setCurrentDate((prev) => {
       const newDate = new Date(prev);
-      if (direction === 'prev') {
-        newDate.setMonth(prev.getMonth() - 1);
-      } else {
-        newDate.setMonth(prev.getMonth() + 1);
-      }
+      newDate.setMonth(direction === "prev" ? prev.getMonth() - 1 : prev.getMonth() + 1);
       return newDate;
     });
   };
 
-  const days = getDaysInMonth(currentDate);
-  const weekDays = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+  useEffect(() => {
+    if (!currentDate) return;
+
+    getMonthlyHistoryMood(currentDate.getMonth() + 1).then((r) => {
+      const moods: Record<string, number> = {};
+      r?.history_week?.forEach((i: any) => {
+        moods[i.day] = Math.round(Number(i.avg_mood));
+      });
+
+      setDays(getDaysInMonth(currentDate, moods));
+    });
+  }, [currentDate]);
+
+  const weekDays = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"];
 
   return (
       <div className="max-w-md mx-auto">
@@ -113,14 +111,14 @@ export const MoodCalendar = () => {
 
           {/* Calendar Grid */}
           <div className="grid grid-cols-7 gap-1">
-            {days.map((day, index) => (
+            {days.map((dayObj, index) => (
                 <div key={index} className="aspect-square flex items-center justify-center relative">
-                  {day && (
+                  {dayObj.day && (
                       <div
                           className="w-full h-full flex flex-col items-center justify-center rounded-lg hover:bg-secondary/30 transition-colors cursor-pointer">
-                        <span className="text-sm text-foreground font-medium mb-1">{day}</span>
-                        {getMoodForDate(day) && (
-                            <span className="text-xs">{moodEmojis[getMoodForDate(day)]}</span>
+                        <span className="text-sm text-foreground font-medium mb-1">{dayObj.day}</span>
+                        {dayObj.mood !== null && (
+                            <span className="text-xs h-1">{moodEmojis[dayObj.mood]}</span>
                         )}
                       </div>
                   )}

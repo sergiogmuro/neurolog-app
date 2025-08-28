@@ -11,7 +11,7 @@ export const Home = ({ setMoodId }: HomeProps) => {
   };
 
   return (
-      <div className="max-w-md mx-auto relative min-h-screen px-4 py-6">
+      <div className="max-w-md mx-auto relative ">
         {/* Botón flotante arriba a la derecha */}
         <button
             onClick={handleSkip}

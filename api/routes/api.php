@@ -19,5 +19,6 @@ Route::get('/anon-id', function () {
     });
     Route::get('/moods', [MoodController::class, 'index']);
     Route::get('/mood-logs', [MoodLogController::class, 'index']);
+    Route::get('/mood-monthly/{month}', [MoodLogController::class, 'monthHistory']);
     Route::post('/mood-logs', [MoodLogController::class, 'store']);
 //});

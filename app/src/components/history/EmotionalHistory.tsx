@@ -4,6 +4,7 @@ import {useEffect, useState} from "react";
 import {getHistoryMood} from "@/api/moodService.ts";
 import {format, isToday, isYesterday, differenceInCalendarDays, parseISO} from "date-fns";
 import {getMoodByValue} from "@/interfaces/moods.tsx";
+import {HistoryChart} from "@/components/history/HistoryChart.tsx";
 
 function formatMoodDateTime(isoDate: string) {
   const dateObj = parseISO(isoDate);
@@ -26,12 +27,14 @@ function formatMoodDateTime(isoDate: string) {
 
 export const EmotionalHistory = () => {
   const [moodHistoryData, setMoodHistoryData] = useState<any>(undefined);
+  const [moodHistoryDayByDay, setMoodHistoryDayByDay] = useState<any>(undefined);
   const [moodLastWeekAvg, setMoodLastWeekAvg] = useState(0)
   const [moodLastWeekCount, setMoodLastWeekCount] = useState(0)
 
   useEffect(() => {
     if (!moodHistoryData) {
       getHistoryMood().then(response => {
+        setMoodHistoryDayByDay(response.history_week)
         setMoodLastWeekAvg(response.last_week_avg)
         setMoodLastWeekCount(response.last_week_count)
 
@@ -78,8 +81,10 @@ export const EmotionalHistory = () => {
           </p>
         </div>
 
+        {moodHistoryData &&  <HistoryChart data={moodHistoryDayByDay}/>}
+
         {/* Stats Card */}
-        <Card className="glass-card rounded-2xl p-6 mb-6">
+       {/* <Card className="glass-card rounded-2xl p-6 mb-6">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-lg font-semibold text-foreground">Ultima semana</h3>
             <TrendingUp className="text-accent" size={20}/>
@@ -103,10 +108,11 @@ export const EmotionalHistory = () => {
                         <TrendingDown className="text-orange-200" size={30}/>
                 }
               </div>
-              {/*<div className="text-xs text-muted-foreground">Tendencia</div>*/}
+              <div className="text-xs text-muted-foreground">Tendencia</div>
             </div>
           </div>
-        </Card>
+        </Card>*/}
+
         {moodHistoryData
             ?
             <Card className="glass-card rounded-2xl p-6 mb-6">
@@ -120,7 +126,7 @@ export const EmotionalHistory = () => {
             :
             <Card key={1} className="glass-card rounded-2xl p-6 mb-6 animate-pulse">
               <div className="flex grid grid-cols gap-4 text-left">
-                <div  className="flex-1 space-y-2">
+                <div className="flex-1 space-y-2">
                   <div className="h-6 bg-gray-400/30 rounded w-1/2"></div>
                   <div className="h-6 bg-gray-400/30 rounded w-1/2"></div>
                 </div>
