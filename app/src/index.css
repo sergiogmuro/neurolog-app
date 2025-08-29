@@ -236,7 +236,7 @@
     height: 100vh;
     opacity: 0;
     display: block;
-    transition: opacity 2s ease;
+    transition: opacity 400ms ease;
     z-index: 1; /* detrás del contenido */
     pointer-events: none;
 }

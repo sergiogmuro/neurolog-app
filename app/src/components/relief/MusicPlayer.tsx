@@ -4,7 +4,7 @@ import {Button} from "@/components/ui/button";
 import {Skeleton} from "@/components/ui/skeleton";
 import {Alert, AlertDescription} from "@/components/ui/alert";
 import {useToast} from "@/hooks/use-toast";
-import {ArrowLeft, Play, Pause, Music, Volume2, AlertCircle} from "lucide-react";
+import {ArrowLeft, Play, Pause, Music, Volume2, AlertCircle, Brain} from "lucide-react";
 
 interface Song {
   id: number;
@@ -234,11 +234,11 @@ export const MusicPlayer = ({}: MusicSelectorProps) => {
                   </div>
               )}
 
-              <div className="relative z-10 music-ambient-wrapper">
+              <div className="relative z-10 music-ambient-wrapper pt-12">
                 <div className="text-center mb-6">
                   <div
                       className={`w-20 h-20 mx-auto mb-4 bg-gradient-to-br from-indigo-400 to-purple-400 rounded-full flex items-center justify-center transition-all duration-1000 ${isPlaying ? 'animate-slow-pulse shadow-lg shadow-indigo-400/50' : ''}`}>
-                    <Volume2 className="text-white" size={32}/>
+                    <Brain className="text-white" size={44}/>
                   </div>
                   <h3 className="text-lg font-semibold text-foreground">{currentSong.title}</h3>
                   <p className="text-sm text-muted-foreground">{currentSong.artist}</p>

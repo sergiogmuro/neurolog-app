@@ -1,17 +1,24 @@
 import {Button} from "@/components/ui/button";
 import {Card} from "@/components/ui/card.tsx";
 import {moodOptions} from "@/interfaces/moods.tsx";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {registerMood} from "@/api/moodService.ts";
+import {useLocation} from "@/hooks/useLocation.ts";
 
 interface MoodSelectorComponent {
-  setMoodId: number
+  setMoodId: (id: number) => void;
 }
 
 export const MoodSelectorComponent = ({setMoodId}: MoodSelectorComponent) => {
   const [selectedMood, setSelectedMood] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [note, setNote] = useState<string>("");
+
+  const { coords, getLocation } = useLocation();
+
+  useEffect(() => {
+    getLocation();
+  }, [getLocation]);
 
   const handleRegister = async () => {
     if (!selectedMood) return;
@@ -20,20 +27,21 @@ export const MoodSelectorComponent = ({setMoodId}: MoodSelectorComponent) => {
       setLoading(true);
       const result = await registerMood({
         mood_id: selectedMood,
-        note: note.trim() || null
+        note: note.trim() || null,
+        latitude: coords.latitude || null,
+        longitude: coords.longitude || null
       });
       console.log("✅ Emoción registrada:", result);
 
-      setMoodId(result?.mood_id ?? 0)
-      // Aquí puedes mostrar un toast o feedback visual
+      setMoodId(result?.mood_id ?? 0);
     } catch (error) {
       console.error("❌ Error al registrar emoción", error);
     } finally {
       setLoading(false);
     }
 
-    // 🔊 Reproducir sonido
-    const audio = new Audio("/assets/sounds/chime-effect.mp3"); // ruta pública en tu proyecto
+    // 🔊 sonido
+    const audio = new Audio("/assets/sounds/chime-effect.mp3");
     audio.play().catch((err) => console.error("Error reproduciendo audio:", err));
   };
 
@@ -59,7 +67,7 @@ export const MoodSelectorComponent = ({setMoodId}: MoodSelectorComponent) => {
                             ? 'ring-4 ring-white/40 shadow-xl'
                             : 'group-hover:shadow-xl'
                     }`}
-                    style={{width: 'fit-content', height: 'fit-content'/*, flexBasis: "fit-content"*/}}
+                    style={{width: 'fit-content', height: 'fit-content'}}
                 >
                   <span className="text-4xl">{mood.emoji}</span>
                 </div>

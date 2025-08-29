@@ -32,11 +32,25 @@ class MoodLogController extends Controller
 
         $days = $this->moodRepository->getAvgDayByDay($userId, $from, $to);
 
+        $excellentDays = collect($days)->filter(fn($avg) => $avg['avg_mood'] >= 4)->count();
+        $lowMoodDays = collect($days)->filter(fn($avg) => $avg['avg_mood'] <= 1)->count();
+
+        if ($excellentDays >= 3) {
+            $motivational = "¡Excelente! Esta semana tuviste $excellentDays días excelentes 🎉";
+        } elseif ($lowMoodDays > 2) {
+            $motivational = "Algunas semanas son difíciles, pero cada día es una oportunidad 🌱";
+        } else {
+            $motivational = "Vas progresando, sigue atento a tus emociones 💪";
+        }
+
         return response()->json([
             'moods' => $moods,
             'history_week' => $days,
             'last_week_count' => $moods->count(),
             'last_week_avg' => number_format($moods->avg('mood_id'), 2),
+            'excellent_days' => $excellentDays,
+            'low_mood_days' => $lowMoodDays,
+            'motivational_message' => $motivational,
         ]);
     }
 
@@ -47,7 +61,7 @@ class MoodLogController extends Controller
         $year = now()->year;
 
         $from = Carbon::create($year, $month, 1)->startOfMonth();
-        $to   = Carbon::create($year, $month, 1)->endOfMonth();
+        $to = Carbon::create($year, $month, 1)->endOfMonth();
 
         $days = $this->moodRepository->getAvgDayByDay($userId, $from, $to, false);
 
@@ -60,13 +74,17 @@ class MoodLogController extends Controller
     {
         $data = $request->validate([
             'mood_id' => 'required|exists:moods,id',
-            'note' => 'nullable|string'
+            'note' => 'nullable|string',
+            'latitude' => 'nullable|numeric',
+            'longitude' => 'nullable|numeric'
         ]);
 
         $log = MoodLog::create([
             'user_id' => 1,//$request->user()->id,
             'mood_id' => $data['mood_id'],
-            'note' => $data['note'] ?? null
+            'note' => $data['note'] ?? null,
+            'latitude' => $data['latitude'] ?? null,
+            'longitude' => $data['longitude'] ?? null,
         ]);
 
         return response()->json($log, 201);

@@ -3,6 +3,8 @@ import axiosClient from "./axiosClient";
 export interface MoodPayload {
   mood_id: string;
   note?: string | null;
+  latitude?: number | null;
+  longitude?: number | null;
 }
 
 export const registerMood = async (payload: MoodPayload) => {

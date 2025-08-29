@@ -85,7 +85,7 @@ const Index = () => {
   };
 
   return (
-      <div className="cosmic-bg min-h-screen pt-6 pb-24 px-6 content-center ">
+      <div className="cosmic-bg min-h-screen pt-16 pb-24 px-6 content-center ">
         <div className="relative" style={{fontFamily: 'Raleway', fontWeight: 300}}>
           {renderCurrentView()}
           {currentView == "login" || currentView !== "home" &&

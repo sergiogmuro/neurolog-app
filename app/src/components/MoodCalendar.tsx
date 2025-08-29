@@ -20,7 +20,7 @@ export const MoodCalendar = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [days, setDays] = useState<CalendarDay[]>([]);
 
-  const getDaysInMonth = (date: Date, moods: Record<string, string>) => {
+  const getDaysInMonth = (date: Date, moods?: Record<string, string>) => {
     const year = date.getFullYear();
     const month = date.getMonth();
     const firstDay = new Date(year, month, 1);
@@ -38,7 +38,7 @@ export const MoodCalendar = () => {
     // actual days
     for (let day = 1; day <= daysInMonth; day++) {
       const dateString = `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
-      calendar.push({ day, mood: moods[dateString] ?? null });
+      calendar.push({day, mood: moods ? moods[dateString] : null});
     }
 
     return calendar;
@@ -59,13 +59,15 @@ export const MoodCalendar = () => {
   useEffect(() => {
     if (!currentDate) return;
 
+    setDays(getDaysInMonth(currentDate));
+
     getMonthlyHistoryMood(currentDate.getMonth() + 1).then((r) => {
       const moods: Record<string, number> = {};
       r?.history_week?.forEach((i: any) => {
         moods[i.day] = Math.round(Number(i.avg_mood));
       });
 
-      setDays(getDaysInMonth(currentDate, moods));
+     setDays(getDaysInMonth(currentDate, moods));
     });
   }, [currentDate]);
 

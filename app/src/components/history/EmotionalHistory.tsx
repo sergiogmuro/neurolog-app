@@ -30,6 +30,9 @@ export const EmotionalHistory = () => {
   const [moodHistoryDayByDay, setMoodHistoryDayByDay] = useState<any>(undefined);
   const [moodLastWeekAvg, setMoodLastWeekAvg] = useState(0)
   const [moodLastWeekCount, setMoodLastWeekCount] = useState(0)
+  const [motivationalMessage, setMotivationalMessage] = useState(undefined)
+  const [excellentDays, setExcellentDays] = useState(0)
+  const [lowMoodDays, setLowMoodDays] = useState(0)
 
   useEffect(() => {
     if (!moodHistoryData) {
@@ -37,6 +40,9 @@ export const EmotionalHistory = () => {
         setMoodHistoryDayByDay(response.history_week)
         setMoodLastWeekAvg(response.last_week_avg)
         setMoodLastWeekCount(response.last_week_count)
+        setMotivationalMessage(response.motivational_message)
+        setExcellentDays(response.excellent_days)
+        setLowMoodDays(response.low_mood_days)
 
         const data = response.moods.map(mood => {
           const {dateLabel, timeLabel} = formatMoodDateTime(mood.created_at);
@@ -81,7 +87,7 @@ export const EmotionalHistory = () => {
           </p>
         </div>
 
-        {moodHistoryData &&  <HistoryChart data={moodHistoryDayByDay}/>}
+        {moodHistoryData && <HistoryChart data={moodHistoryDayByDay}/>}
 
         {/* Stats Card */}
        {/* <Card className="glass-card rounded-2xl p-6 mb-6">
@@ -116,10 +122,17 @@ export const EmotionalHistory = () => {
         {moodHistoryData
             ?
             <Card className="glass-card rounded-2xl p-6 mb-6">
-              <div className="grid grid-cols gap-4 text-left">
+              <div className="grid grid-cols-1 gap-4 text-left p-4">
                 <div>
                   <div className="text-2xl font-bold text-foreground">Esta semana tuviste</div>
-                  <div className="text-2xl text-foreground">3 dias excelentes !!!</div>
+                  <div className="text-2xl text-foreground">{
+                    excellentDays == 0 ?
+                        `No tuviste dias excelentes` :
+                        excellentDays == 1 ?
+                            `${excellentDays} día excelente` :
+                            `${excellentDays} días excelentes`
+                  } !!!</div>
+                  <div className="mt-2 text-sm text-muted-foreground">{motivationalMessage}</div>
                 </div>
               </div>
             </Card>
@@ -127,6 +140,7 @@ export const EmotionalHistory = () => {
             <Card key={1} className="glass-card rounded-2xl p-6 mb-6 animate-pulse">
               <div className="flex grid grid-cols gap-4 text-left">
                 <div className="flex-1 space-y-2">
+                  <div className="h-6 bg-gray-400/30 rounded w-1/2"></div>
                   <div className="h-6 bg-gray-400/30 rounded w-1/2"></div>
                   <div className="h-6 bg-gray-400/30 rounded w-1/2"></div>
                 </div>

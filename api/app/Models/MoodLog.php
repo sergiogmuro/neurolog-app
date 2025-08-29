@@ -9,7 +9,7 @@ class MoodLog extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'mood_id', 'note'];
+    protected $fillable = ['user_id', 'mood_id', 'note', 'latitude', 'longitude'];
 
     public function mood()
     {
