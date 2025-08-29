@@ -5,6 +5,7 @@ export interface MoodPayload {
   note?: string | null;
   latitude?: number | null;
   longitude?: number | null;
+  secondary_emotion?: string | null;
 }
 
 export const registerMood = async (payload: MoodPayload) => {

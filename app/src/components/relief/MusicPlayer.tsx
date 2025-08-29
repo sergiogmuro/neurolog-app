@@ -67,6 +67,8 @@ const relaxingSongs: Song[] = [
 
 ];
 
+const PHRASES_DELAY = 15000;
+
 const inspirationalPhrases = [
   "Respira profundamente y encuentra tu paz interior",
   "Cada momento es una nueva oportunidad para sanar",
@@ -129,7 +131,7 @@ export const MusicPlayer = ({}: MusicSelectorProps) => {
 
     const interval = setInterval(() => {
       setCurrentPhrase((prev) => (prev + 1) % inspirationalPhrases.length);
-    }, 8000);
+    }, PHRASES_DELAY);
 
     return () => clearInterval(interval);
   }, [isPlaying, currentSong]);
@@ -218,6 +220,23 @@ export const MusicPlayer = ({}: MusicSelectorProps) => {
 
     start();
   }, [currentSong, playOnSelect]);
+
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    // Cuando termina la canción
+    const handleEnded = () => {
+      setPlayOnSelect(false);
+    };
+
+    audio.addEventListener("ended", handleEnded);
+
+    // Limpieza al desmontar
+    return () => {
+      audio.removeEventListener("ended", handleEnded);
+    };
+  }, [audioRef]);
 
   return (
       <div className="space-y-6">

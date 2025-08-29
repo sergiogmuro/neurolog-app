@@ -301,7 +301,7 @@
 }
 
 .phrase-animation {
-    animation: phraseFadeCycle 8s ease-in-out both;
+    animation: phraseFadeCycle 15s ease-in-out both;
 }
 
 /* Accesibilidad opcional */
@@ -315,11 +315,11 @@
 @keyframes ambient-breathe {
     0% {
         background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%;
-        filter: brightness(1) saturate(1);
+        filter: brightness(1) saturate(1) hue-rotate(0deg);
     }
     100% {
-        background-size: 120% 120%, 120% 120%, 120% 120%, 100% 100%;
-        filter: brightness(1.1) saturate(1.2);
+        background-size: 120% 120%, 150% 120%, 100% 120%, 100% 100%;
+        filter: brightness(1.1) saturate(1.2) hue-rotate(-10deg);
     }
 }
 
@@ -339,7 +339,7 @@ body.music-ambient::before {
             radial-gradient(2px 2px at 25% 65%, hsl(var(--secondary) / 0.4), transparent);
     background-repeat: repeat;
     background-size: 300px 200px;
-    animation: ambient-float 5s ease-in-out infinite alternate;
+    animation: ambient-float 1s ease-in-out infinite alternate;
     pointer-events: none;
     z-index: -1;
 }
